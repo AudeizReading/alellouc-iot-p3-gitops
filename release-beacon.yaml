@@ -1,0 +1,67 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: release-beacon
+  name: release-beacon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: release-beacon
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: release-beacon
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: release-beacon-env
+          image: audeizreading/release-beacon:v1
+          imagePullPolicy: IfNotPresent
+          name: release-beacon
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: release-beacon
+  name: release-beacon
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: http
+      nodePort: 30080
+  selector:
+    app: release-beacon
+  type: NodePort
