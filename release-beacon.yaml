@@ -20,7 +20,7 @@ spec:
         - envFrom:
             - configMapRef:
                 name: release-beacon-env
-          image: audeizreading/release-beacon:v1
+          image: audeizreading/release-beacon:v2
           imagePullPolicy: IfNotPresent
           name: release-beacon
           ports:
