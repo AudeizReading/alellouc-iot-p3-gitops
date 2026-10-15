@@ -21,7 +21,7 @@ spec:
             - configMapRef:
                 name: release-beacon-env
           image: audeizreading/release-beacon:v1
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: release-beacon
           ports:
             - containerPort: 8080
