@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: Always
           name: release-beacon
           ports:
-            - containerPort: 8080
+            - containerPort: 8087
               name: http
               protocol: TCP
           livenessProbe:
